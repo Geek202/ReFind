@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'me.geek.tom'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:8.0'
+    implementation 'org.ow2.asm:asm-commons:8.0'
+    implementation 'org.ow2.asm:asm-util:8.0'
+    implementation 'net.sf.jopt-simple:jopt-simple:6.0-alpha-3'
+}

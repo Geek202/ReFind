@@ -1,0 +1,6 @@
+client.jar
+out/
+build/
+.gradle/
+.idea/
+*.iml
