@@ -3,9 +3,7 @@ package me.geek.tom.refind;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import me.geek.tom.refind.search.ClassNameSearch;
-import me.geek.tom.refind.search.FieldTypeSearch;
-import me.geek.tom.refind.search.GetterSearch;
+import me.geek.tom.refind.search.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +21,13 @@ public class Refind {
 
         OptionSpec<File> inputArg = parser.accepts("input").withRequiredArg().ofType(File.class);
         OptionSpec<String> searchArg = parser.accepts("term").withRequiredArg();
+
         parser.accepts("fieldtype");
         parser.accepts("classname");
         parser.accepts("getter");
+        parser.accepts("constructor");
+        parser.accepts("locals");
+
         parser.accepts("help");
 
         OptionSet options = parser.parse(args);
@@ -52,6 +54,10 @@ public class Refind {
             s.add(new ClassNameSearch());
         if (options.has("getter"))
             s.add(new GetterSearch());
+        if (options.has("constructor"))
+            s.add(new ConstructorSearch());
+        if (options.has("locals"))
+            s.add(new LocalVarTypeSearch());
 
         doSearch(search, jar, s, System.out::println);
     }
@@ -64,7 +70,7 @@ public class Refind {
 
             if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
                 for (Search search : searches)
-                    search.search(jar, entry, term, handler);
+                    search.search(jar, entry, term, s -> handler.accept("["+search.getClass().getSimpleName()+"] "+s));
             }
         }
     }
